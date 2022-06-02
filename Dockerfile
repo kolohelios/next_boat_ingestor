@@ -4,7 +4,7 @@
 FROM rust:1.61.0-alpine3.15 AS builder
 
 # Install git (required for fetching the dependencies)
-RUN apk update && apk add --no-cache git
+RUN apk update && apk add --no-cache git libc-dev
 
 # Create appuser
 ENV USER=next_boat
@@ -29,8 +29,8 @@ COPY src /BUILD/src
 COPY Cargo.toml /BUILD/Cargo.toml
 
 # Fetch dependencies
-RUN cargo clean
-RUN cargo update
+# RUN cargo clean
+# RUN cargo update
 
 # Build the binary
 RUN cargo build --release
@@ -45,7 +45,7 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 
 # Copy our static executable
-COPY --from=builder /BUILD/target/release/next_boat /app
+COPY --from=builder /BUILD/target/release/next_boat /
 
 # Use an unprivileged user
 USER next_boat:next_boat
@@ -53,4 +53,4 @@ USER next_boat:next_boat
 EXPOSE 5001
 
 # Run the binary
-CMD ["/app/next_boat"]
+CMD ["/next_boat"]
