@@ -28,10 +28,6 @@ WORKDIR /BUILD
 COPY src /BUILD/src
 COPY Cargo.toml /BUILD/Cargo.toml
 
-# Fetch dependencies
-# RUN cargo clean
-# RUN cargo update
-
 # Build the binary
 RUN cargo build --release
 
