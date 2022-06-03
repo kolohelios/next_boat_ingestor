@@ -1,15 +1,16 @@
-use actix_web::{get, web, App, HttpServer, HttpResponse, error};
+use actix_web::{get, web, App, HttpServer, HttpResponse, error, client::Client};
 use deadpool_redis::{cmd, Pool, PoolError};
 use deadpool_redis::redis::RedisError;
 use dotenv::dotenv;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use thiserror::*;
 use chrono::{Utc};
 
 #[derive(Debug, Deserialize)]
 struct Config {
     #[serde(default)]
-    redis: deadpool_redis::Config
+    redis: deadpool_redis::Config,
+    wsf_api_key: String
 }
 
 impl Config {
@@ -30,8 +31,30 @@ enum Error {
 
 impl error::ResponseError for Error {}
 
+#[allow(non_snake_case)]
+#[derive(Debug, Deserialize, Serialize)]
+struct Terminal {
+    TerminalID: i8,
+    Description: String
+}
+
 #[get("/")]
 async fn index(pool: web::Data<Pool>) -> Result<HttpResponse, Error> {
+    let client = Client::default();
+
+   // Create request builder and send request
+    let cfg = Config::from_env().unwrap();
+    let api_key = cfg.wsf_api_key;
+    let response = client.get(format!("https://www.wsdot.wa.gov/ferries/api/schedule/rest/terminals/2022-06-02?apiaccesscode={}", api_key))
+        .header("User-Agent", "actix-web/3.0")
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Terminal>>()
+        .await;
+
+    println!("Response: {:?}", response);
+
     let mut conn = pool.get().await?;
     let key = String::from("test2");
     let value = 2848490;
