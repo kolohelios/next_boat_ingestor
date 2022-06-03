@@ -17,6 +17,40 @@ impl error::ResponseError for Error {}
 #[allow(non_snake_case)]
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Terminal {
-    TerminalID: i8,
+    TerminalID: u8,
     Description: String
+}
+
+#[allow(non_snake_case)]
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VesselLocation {
+    VesselID: u8,
+    VesselName: String,
+    Mmsi: Option<u32>,
+    DepartingTerminalID: Option<u8>,
+    DepartingTerminalName: Option<String>,
+    DepartingTerminalAbbrev: Option<String>,
+    ArrivingTerminalID: Option<u8>,
+    ArrivingTerminalName: Option<String>,
+    ArrivingTerminalAbbrev: Option<String>,
+    Latitude: f64,
+    Longitude: f64,
+    Speed: f64,
+    Heading: u16,
+    InService: bool,
+    AtDock: bool,
+    LeftDock: Option<String>,
+    Eta: Option<String>,
+    EtaBasis: Option<String>,
+    ScheduledDeparture: Option<String>,
+    OpRouteAbbrev: Vec<String>,
+    VesselPositionNum: Option<u8>,
+    SortSeq: u16,
+    ManagedBy: u8,
+    pub TimeStamp: String,
+    VesselWatchShutID: u8,
+    VesselWatchShutMsg: String,
+    VesselWatchShutFlag: String,
+    VesselWatchStatus: String,
+    VesselWatchMsg: String
 }
