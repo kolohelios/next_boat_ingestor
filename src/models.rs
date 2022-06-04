@@ -24,7 +24,7 @@ pub struct Terminal {
 #[allow(non_snake_case)]
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VesselLocation {
-    VesselID: u8,
+    pub VesselID: u8,
     VesselName: String,
     Mmsi: Option<u32>,
     DepartingTerminalID: Option<u8>,
@@ -33,10 +33,10 @@ pub struct VesselLocation {
     ArrivingTerminalID: Option<u8>,
     ArrivingTerminalName: Option<String>,
     ArrivingTerminalAbbrev: Option<String>,
-    Latitude: f64,
-    Longitude: f64,
-    Speed: f64,
-    Heading: u16,
+    pub Latitude: f64,
+    pub Longitude: f64,
+    pub Speed: f64,
+    pub Heading: f64,
     InService: bool,
     AtDock: bool,
     LeftDock: Option<String>,

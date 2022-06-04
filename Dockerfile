@@ -7,7 +7,7 @@ FROM rust:1.61.0-alpine3.15 AS builder
 RUN apk update && apk add --no-cache git libc-dev
 
 # Create appuser
-ENV USER=next_boat
+ENV USER=next_boat_ingestor
 ENV UID=10001 
 # See https://stackoverflow.com/a/55757473/12429735RUN 
 RUN adduser \    
@@ -41,12 +41,12 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 
 # Copy our static executable
-COPY --from=builder /BUILD/target/release/next_boat /
+COPY --from=builder /BUILD/target/release/next_boat_ingestor /
 
 # Use an unprivileged user
-USER next_boat:next_boat
+USER next_boat_ingestor:next_boat_ingestor
 
 EXPOSE 5001
 
 # Run the binary
-CMD ["/next_boat"]
+CMD ["/next_boat_ingestor"]
